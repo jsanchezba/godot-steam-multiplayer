@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 	pass
 	
 func _on_player_connected(id: int) -> void:
-	spawn_player(id)
+	pass
 
 func spawn_player(id: int):
 	var new_player = player_scene.instantiate()
