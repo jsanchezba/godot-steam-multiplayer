@@ -5,6 +5,7 @@ class_name Lobby extends CanvasLayer
 @onready var message_input: TextEdit = %MessageInput
 @onready var messages_container: RichTextLabel = %MessagesContainer
 
+signal game_started
 
 func _ready() -> void:
 	if !SteamNetwork.lobby_joined.is_connected(_on_lobby_joined):
@@ -45,3 +46,8 @@ func _on_matchmaking_pressed() -> void:
 
 func _on_message_received(username: String, message: String) -> void:
 	messages_container.add_text(username + ': ' + message + '\n')
+
+
+func _on_play_button_pressed() -> void:
+	game_started.emit()
+	hide()

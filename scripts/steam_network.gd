@@ -9,6 +9,7 @@ var socket = null
 signal lobby_created(_lobby_id: int, _name: String)
 signal lobby_joined(_lobby_id: int, _name: String)
 signal lobby_message_received(username: String, message: String)
+signal player_joined(id: int)
 
 func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created.bind())
