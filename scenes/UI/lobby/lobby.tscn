@@ -96,13 +96,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 450)
 layout_mode = 2
 
-[node name="MessageButton" type="Button" parent="Control/MarginContainer/HBoxContainer/Main"]
+[node name="MessagesContainer" type="RichTextLabel" parent="Control/MarginContainer/HBoxContainer/Main/Messages"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main"]
+layout_mode = 2
+
+[node name="MessageButton" type="Button" parent="Control/MarginContainer/HBoxContainer/Main/HBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Send Message
 "
 
+[node name="MessageInput" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Write a message..."
+
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/CreateLobby" to="." method="_on_create_lobby_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/JoinLobby" to="." method="_on_join_lobby_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/Matchmaking" to="." method="_on_matchmaking_pressed"]
-[connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Main/MessageButton" to="." method="_on_message_button_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Main/HBoxContainer/MessageButton" to="." method="_on_message_button_pressed"]

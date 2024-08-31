@@ -7,6 +7,7 @@ var matchmake_phase = 0
 
 var socket = null
 signal lobby_created(this_lobby_id: int)
+signal lobby_message_received(username: String, message: String)
 
 func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created.bind())
@@ -14,7 +15,9 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.connected_to_server.connect(_on_connection)
 	multiplayer.connection_failed.connect(_on_connection_failed)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
+	Steam.lobby_message.connect(_on_lobby_message)
 
 func _process(delta: float) -> void:
 	pass
@@ -71,7 +74,7 @@ func _on_lobby_created(_connect: int, new_lobby_id: int) -> void:
 
 func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response: int):
 	if response == Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS:
-		#lobby_id = _lobby_id
+		lobby_id = _lobby_id
 		
 		if !is_host:
 			var id = Steam.getLobbyOwner(_lobby_id)
@@ -103,6 +106,11 @@ func connect_socket(steam_id: int) -> void:
 	socket.create_client(steam_id, 0)
 	multiplayer.set_multiplayer_peer(socket)
 
+func send_message(message: String) -> void:
+	var sent = Steam.sendLobbyChatMsg(lobby_id, message)
+	if not sent:
+		print_debug('[ERROR] -> Message not send')
+
 func _on_player_connected(id: int):
 	print('player connected')
 
@@ -111,3 +119,10 @@ func _on_connection():
 	
 func _on_connection_failed():
 	print('connection failed')
+
+func _on_server_disconnected():
+	print('Server disconnected')
+	
+func _on_lobby_message(_lobby_id: int, user: int, buffer: String, chat_type: int):
+	var username = Steam.getFriendPersonaName(user)
+	lobby_message_received.emit(username, buffer)
