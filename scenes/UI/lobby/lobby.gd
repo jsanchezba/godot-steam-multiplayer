@@ -22,12 +22,13 @@ func _on_invite_friend_pressed() -> void:
 		if friend.name == 'Nelcu':
 			print('Inviting friend %s' % friend.id)
 			#Steam.activateGameOverlayInviteDialog(friend.id)
-	#if SteamNetwork.lobby_id:
-		#print('Open game overlay')
-		#Steam.activateGameOverlayInviteDialog(SteamNetwork.lobby_id)
 
 func _on_lobby_created(this_lobby_id: int):
 	lobby_name_value.text = str(this_lobby_id)
 
 func _on_message_button_pressed() -> void:
 	Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, "test")
+
+
+func _on_matchmaking_pressed() -> void:
+	SteamNetwork.lobby_matchmaking()

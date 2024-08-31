@@ -3,6 +3,7 @@ extends Node
 var lobby_id: int = 0
 var lobby_members_max: int = 2
 var is_host: bool = false
+var matchmake_phase = 0
 
 var socket = null
 signal lobby_created(this_lobby_id: int)
@@ -13,6 +14,7 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.connected_to_server.connect(_on_connection)
 	multiplayer.connection_failed.connect(_on_connection_failed)
+	Steam.lobby_match_list.connect(_on_lobby_match_list)
 
 func _process(delta: float) -> void:
 	pass
@@ -24,6 +26,34 @@ func create_lobby() -> void:
 func join_lobby(_lobby_id: int) -> void:
 	print("Attempting to join lobby %s" % _lobby_id)
 	Steam.joinLobby(_lobby_id)
+	
+func lobby_matchmaking() -> void:
+	matchmake_phase = 0
+	matchmaking_loop()
+
+func matchmaking_loop():
+	if matchmake_phase < 4:
+		Steam.addRequestLobbyListDistanceFilter(matchmake_phase)
+		Steam.requestLobbyList()
+	else:
+		print("[STEAM] Failed to automatically match you with a lobby. Please try again.")
+
+func _on_lobby_match_list(lobbies: Array) -> void:
+	var attempting_join: bool = false
+	for this_lobby in lobbies:
+		var lobby_name: String = Steam.getLobbyData(this_lobby, "name")
+		var lobby_nums: int = Steam.getNumLobbyMembers(this_lobby)
+		
+		if lobby_nums < lobby_members_max and not attempting_join:
+			attempting_join = true
+			print("Attempting to join lobby...")
+			print_debug('Joining lobby %s' % this_lobby)
+			Steam.joinLobby(this_lobby)
+			
+	# No lobbies that matched were found, go onto the next phase
+	if not attempting_join:
+		matchmake_phase += 1
+		matchmaking_loop()
 	
 func _on_lobby_created(_connect: int, new_lobby_id: int) -> void:
 	if _connect == 1:

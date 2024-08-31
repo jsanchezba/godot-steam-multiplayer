@@ -47,11 +47,10 @@ layout_mode = 2
 text = "Join Lobby
 "
 
-[node name="InviteFriend" type="Button" parent="Control/MarginContainer/HBoxContainer/Side"]
+[node name="Matchmaking" type="Button" parent="Control/MarginContainer/HBoxContainer/Side"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-text = "Invite friend
-"
+text = "Matchmaking"
 
 [node name="Players" type="Panel" parent="Control/MarginContainer/HBoxContainer/Side"]
 custom_minimum_size = Vector2(0, 400)
@@ -105,5 +104,5 @@ text = "Send Message
 
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/CreateLobby" to="." method="_on_create_lobby_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/JoinLobby" to="." method="_on_join_lobby_pressed"]
-[connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/InviteFriend" to="." method="_on_invite_friend_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/Matchmaking" to="." method="_on_matchmaking_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Main/MessageButton" to="." method="_on_message_button_pressed"]
