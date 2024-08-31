@@ -6,13 +6,15 @@ var is_host: bool = false
 var matchmake_phase = 0
 
 var socket = null
-signal lobby_created(this_lobby_id: int)
+signal lobby_created(_lobby_id: int, _name: String)
+signal lobby_joined(_lobby_id: int, _name: String)
 signal lobby_message_received(username: String, message: String)
 
 func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created.bind())
 	Steam.lobby_joined.connect(_on_lobby_joined.bind())
 	multiplayer.peer_connected.connect(_on_player_connected)
+	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connection)
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
@@ -29,7 +31,31 @@ func create_lobby() -> void:
 func join_lobby(_lobby_id: int) -> void:
 	print("Attempting to join lobby %s" % _lobby_id)
 	Steam.joinLobby(_lobby_id)
+
+func get_friends_lobbies() -> Dictionary:
+	var results: Dictionary = {}
 	
+	for i in range(0, Steam.getFriendCount()):
+		var steam_id: int = Steam.getFriendByIndex(i, Steam.FRIEND_FLAG_IMMEDIATE)
+		var game_info: Dictionary = Steam.getFriendGamePlayed(steam_id)
+		
+		if game_info.size() > 0:
+			var app_id: int = game_info['id']
+			var lobby = game_info['lobby']
+			
+			if app_id != Steam.getAppID() or lobby is String:
+				# Either not in this game, or not in a lobby
+				continue
+
+			results[steam_id] = lobby
+	return results
+
+func join_frield_lobby():
+	var friends_lobbies: Dictionary = get_friends_lobbies()
+	var lobbies = friends_lobbies.values()
+	if lobbies.size() > 0:
+		join_lobby(lobbies[0])
+
 func lobby_matchmaking() -> void:
 	matchmake_phase = 0
 	matchmaking_loop()
@@ -44,6 +70,7 @@ func matchmaking_loop():
 func _on_lobby_match_list(lobbies: Array) -> void:
 	var attempting_join: bool = false
 	for this_lobby in lobbies:
+		print(this_lobby)
 		var lobby_name: String = Steam.getLobbyData(this_lobby, "name")
 		var lobby_nums: int = Steam.getNumLobbyMembers(this_lobby)
 		
@@ -70,7 +97,8 @@ func _on_lobby_created(_connect: int, new_lobby_id: int) -> void:
 		print_debug('[INFO] -> Creating socket connection..')
 		create_socket()
 		
-		lobby_created.emit(lobby_id)
+		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
+		lobby_created.emit(lobby_id, lobby_name)
 
 func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response: int):
 	if response == Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS:
@@ -79,6 +107,9 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 		if !is_host:
 			var id = Steam.getLobbyOwner(_lobby_id)
 			connect_socket(id)
+		
+		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
+		lobby_joined.emit(lobby_id, lobby_name)
 	else:
 		var FAIL_REASON: String
 		match response:
@@ -114,10 +145,14 @@ func send_message(message: String) -> void:
 func _on_player_connected(id: int):
 	print('player connected')
 
+func _on_player_disconnected(id: int):
+	print('player disconnected')
+
 func _on_connection():
 	print('conection success')
 	
 func _on_connection_failed():
+	multiplayer.set_network_peer(null)
 	print('connection failed')
 
 func _on_server_disconnected():

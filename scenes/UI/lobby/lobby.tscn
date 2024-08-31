@@ -76,21 +76,51 @@ offset_bottom = 391.0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LobbyName" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main"]
+[node name="Header" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main"]
 layout_mode = 2
 
-[node name="LobbyNameLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/Main/LobbyName"]
+[node name="GridContainer" type="GridContainer" parent="Control/MarginContainer/HBoxContainer/Main/Header"]
 layout_mode = 2
-text = "Lobby Name
-"
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+columns = 2
 
-[node name="LobbyText" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main"]
+[node name="LobbyNameLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
 layout_mode = 2
+text = "Lobby Name"
 
-[node name="LobbyNameValue" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/LobbyText"]
+[node name="LobbyNameValue" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 35)
 layout_mode = 2
+editable = false
+
+[node name="LobbyIDLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
+layout_mode = 2
+text = "Lobby ID"
+
+[node name="LobbyIDValue" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 35)
+layout_mode = 2
+editable = false
+
+[node name="Control" type="Control" parent="Control/MarginContainer/HBoxContainer/Main/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main/Header"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/Main/Header/VBoxContainer"]
+layout_mode = 2
+text = "STEAM ID"
+horizontal_alignment = 1
+
+[node name="PlayButton" type="Button" parent="Control/MarginContainer/HBoxContainer/Main/Header/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+text = "Play"
 
 [node name="Messages" type="Panel" parent="Control/MarginContainer/HBoxContainer/Main"]
 custom_minimum_size = Vector2(0, 450)
@@ -107,6 +137,7 @@ grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/Main"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="MessageButton" type="Button" parent="Control/MarginContainer/HBoxContainer/Main/HBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
