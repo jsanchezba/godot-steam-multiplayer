@@ -41,7 +41,6 @@ func _on_message_button_pressed() -> void:
 	message_input.text = ''
 
 func _on_matchmaking_pressed() -> void:
-	#SteamNetwork.lobby_matchmaking()
 	SteamNetwork.join_frield_lobby()
 
 func _on_message_received(username: String, message: String) -> void:

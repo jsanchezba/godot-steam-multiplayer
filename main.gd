@@ -24,3 +24,4 @@ func spawn_player(id: int):
 
 func _on_game_started() -> void:
 	SceneManager.change_scene('level_1')
+	spawn_player(1)

@@ -8,9 +8,6 @@
 resource_name = "Water"
 texture = ExtResource("2_ldf58")
 texture_region_size = Vector2i(32, 32)
-1:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_x3sxr"]
@@ -21,9 +18,6 @@ sources/0 = SubResource("TileSetAtlasSource_wvrub")
 texture = ExtResource("3_yxbrd")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
-1:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_wcrb5"]
 sources/0 = SubResource("TileSetAtlasSource_7ljna")

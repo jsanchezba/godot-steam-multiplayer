@@ -36,9 +36,10 @@ script = ExtResource("1_3y25r")
 sprite_frames = SubResource("SpriteFrames_24q1u")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.781304
+frame_progress = 0.91808
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_f048q")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
