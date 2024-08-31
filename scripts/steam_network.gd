@@ -169,6 +169,7 @@ func _on_lobby_message(_lobby_id: int, user: int, buffer: String, chat_type: int
 
 @rpc('any_peer', 'call_local', 'reliable')
 func register_player(name):
-	print('Registered player %s' % name)
 	var id = multiplayer.get_remote_sender_id()
+	print('Registered player name %s' % name)
+	print('Registered player ID %s' % id)
 	players[id] = name

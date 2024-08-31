@@ -28,7 +28,9 @@ func _on_game_started() -> void:
 
 @rpc('any_peer', 'call_local', 'reliable')
 func game_started():
-	spawn_player(1)
+	var uid = SteamNetwork.socket.get_unique_id()
+	print('Local player %s' % uid)
+	spawn_player(uid)
 	var players = SteamNetwork.players
 	for player in players:
 		spawn_player(player)

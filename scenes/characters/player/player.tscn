@@ -43,3 +43,12 @@ shape = SubResource("CapsuleShape2D_f048q")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+
+[node name="PlayerName" type="Label" parent="."]
+offset_left = -23.0
+offset_top = -21.0
+offset_right = 70.0
+offset_bottom = 2.0
+scale = Vector2(0.5, 0.5)
+text = "Playername"
+horizontal_alignment = 1
