@@ -89,7 +89,7 @@ columns = 2
 layout_mode = 2
 text = "Lobby Name"
 
-[node name="LobbyNameValue" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
+[node name="LobbyNameValue" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 35)
 layout_mode = 2
@@ -99,7 +99,7 @@ editable = false
 layout_mode = 2
 text = "Lobby ID"
 
-[node name="LobbyIDValue" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
+[node name="LobbyIDValue" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/Main/Header/GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 35)
 layout_mode = 2
@@ -145,7 +145,7 @@ layout_mode = 2
 text = "Send Message
 "
 
-[node name="MessageInput" type="TextEdit" parent="Control/MarginContainer/HBoxContainer/Main/HBoxContainer"]
+[node name="MessageInput" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/Main/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -156,3 +156,5 @@ placeholder_text = "Write a message..."
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/Matchmaking" to="." method="_on_matchmaking_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Main/Header/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Main/HBoxContainer/MessageButton" to="." method="_on_message_button_pressed"]
+[connection signal="focus_entered" from="Control/MarginContainer/HBoxContainer/Main/HBoxContainer/MessageInput" to="." method="_on_message_input_focus_entered"]
+[connection signal="focus_exited" from="Control/MarginContainer/HBoxContainer/Main/HBoxContainer/MessageInput" to="." method="_on_message_input_focus_exited"]

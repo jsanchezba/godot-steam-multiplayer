@@ -4,13 +4,14 @@ class_name Player extends CharacterBody2D
 const speed = 300.0
 var current_delta
 
+var id: int = 0
+var username: String = ''
 #func _enter_tree() -> void:
 	#set_multiplayer_authority(str(name).to_int())
 	
 func _ready() -> void:
 	set_multiplayer_authority(str(name).to_int())
-	if name:
-		player_name.text = str(name)
+	player_name.text = username
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():

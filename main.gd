@@ -15,9 +15,11 @@ func _process(delta: float) -> void:
 func _on_player_connected(id: int) -> void:
 	pass
 
-func spawn_player(id: int):
-	var new_player = player_scene.instantiate()
+func spawn_player(id: int, username: String):
+	var new_player: Player = player_scene.instantiate()
 	new_player.name = str(id)
+	new_player.id = id
+	new_player.username = username
 	call_deferred('add_child', new_player)
 	print_debug('[INFO] -> JOINS player ' + new_player.name)
 	if is_multiplayer_authority():
@@ -29,11 +31,10 @@ func _on_game_started() -> void:
 @rpc('any_peer', 'call_local', 'reliable')
 func game_started():
 	var uid = SteamNetwork.socket.get_unique_id()
-	print('Local player %s' % uid)
-	spawn_player(uid)
+	spawn_player(uid, SteamManager.steam_username)
 	var players = SteamNetwork.players
 	for player in players:
-		spawn_player(player)
+		spawn_player(player, players[player])
 		print('Spawned player %s' % players[player])
 		
 	lobby_UI.hide()

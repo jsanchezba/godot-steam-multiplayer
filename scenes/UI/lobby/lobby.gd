@@ -1,9 +1,11 @@
 class_name Lobby extends CanvasLayer
 
-@onready var lobby_id_value: TextEdit = %LobbyIDValue
-@onready var lobby_name_value: TextEdit = %LobbyNameValue
-@onready var message_input: TextEdit = %MessageInput
+@onready var lobby_id_value: LineEdit = %LobbyIDValue
+@onready var lobby_name_value: LineEdit = %LobbyNameValue
+@onready var message_input: LineEdit = %MessageInput
 @onready var messages_container: RichTextLabel = %MessagesContainer
+
+var is_message_focused: bool = false
 
 signal game_started
 
@@ -36,9 +38,7 @@ func _on_lobby_joined(_lobby_id: int, _name: String):
 	lobby_name_value.text = _name
 
 func _on_message_button_pressed() -> void:
-	var message = message_input.text
-	Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, message)
-	message_input.text = ''
+	send_message()
 
 func _on_matchmaking_pressed() -> void:
 	SteamNetwork.join_frield_lobby()
@@ -49,3 +49,18 @@ func _on_message_received(username: String, message: String) -> void:
 
 func _on_play_button_pressed() -> void:
 	game_started.emit()
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed('enter'):
+		send_message()
+		
+func _on_message_input_focus_entered() -> void:
+	is_message_focused = true
+
+func _on_message_input_focus_exited() -> void:
+	is_message_focused = false
+	
+func send_message():
+	var message = message_input.text
+	Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, message)
+	message_input.text = ''
