@@ -162,11 +162,12 @@ func _on_connection_failed():
 
 func _on_server_disconnected():
 	print('Server disconnected')
-	
+
 func _on_lobby_message(_lobby_id: int, user: int, buffer: String, chat_type: int):
 	var username = Steam.getFriendPersonaName(user)
 	lobby_message_received.emit(username, buffer)
 
 @rpc('any_peer', 'call_local', 'reliable')
 func register_player(name):
-	print(name)
+	var id = multiplayer.get_remote_sender_id()
+	players[id] = name

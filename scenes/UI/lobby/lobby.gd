@@ -49,4 +49,3 @@ func _on_message_received(username: String, message: String) -> void:
 
 func _on_play_button_pressed() -> void:
 	game_started.emit()
-	hide()

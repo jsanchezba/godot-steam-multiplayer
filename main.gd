@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var player_scene: PackedScene
+@onready var lobby_UI: Lobby = $Lobby
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,5 +24,15 @@ func spawn_player(id: int):
 		SceneManager.player = new_player
 
 func _on_game_started() -> void:
-	SceneManager.change_scene('level_1')
 	spawn_player(1)
+	var players = SteamNetwork.players
+	for player in players:
+		spawn_player(player)
+		print('Spawned player %s' % players[player])
+		
+	game_started.rpc()
+
+@rpc('any_peer', 'call_local', 'reliable')
+func game_started():
+	lobby_UI.hide()
+	SceneManager.change_scene('level_1')
