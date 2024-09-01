@@ -50,7 +50,7 @@ func _on_matchmaking_pressed() -> void:
 	SteamNetwork.join_frield_lobby()
 
 func _on_message_received(message: String) -> void:
-	messages_container.add_text(message + '\n')
+	messages_container.add_text(message)
 
 func _on_play_button_pressed() -> void:
 	if not multiplayer.is_server():
@@ -76,8 +76,9 @@ func _on_message_input_focus_exited() -> void:
 	
 func send_message():
 	var message = message_input.text
-	Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, message)
-	message_input.text = ''
+	if message != '':
+		Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, message)
+		message_input.text = ''
 
 func _on_lobby_members_changed():
 	member_list.text = ''

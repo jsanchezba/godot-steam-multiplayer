@@ -35,13 +35,13 @@ func _on_game_started() -> void:
 @rpc('any_peer', 'call_local', 'reliable')
 func game_started():
 	SceneManager.change_scene('level_1')
-	var uid = SteamNetwork.socket.get_unique_id()
-	spawn_player(uid, SteamManager.steam_username)
 	var players = SteamNetwork.players
 	for player in players:
 		spawn_player(player, players[player])
 		print('Spawned player %s' % players[player])
-		
+	
+	var uid = SteamNetwork.socket.get_unique_id()
+	spawn_player(uid, SteamManager.steam_username)
 	lobby_UI.hide()
 
 #func _update_player_position(safe_position: Vector2):
