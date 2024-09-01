@@ -49,8 +49,8 @@ func _on_message_button_pressed() -> void:
 func _on_matchmaking_pressed() -> void:
 	SteamNetwork.join_frield_lobby()
 
-func _on_message_received(username: String, message: String) -> void:
-	messages_container.add_text(username + ': ' + message + '\n')
+func _on_message_received(message: String) -> void:
+	messages_container.add_text(message + '\n')
 
 func _on_play_button_pressed() -> void:
 	game_started.emit()

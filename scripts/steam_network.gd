@@ -10,7 +10,7 @@ var lobby_members: Dictionary
 var socket = null
 signal lobby_created(_lobby_id: int, _name: String)
 signal lobby_joined(_lobby_id: int, _name: String)
-signal lobby_message_received(username: String, message: String)
+signal lobby_message_received(message: String)
 signal lobby_join_failed(reason: String)
 signal player_connected(id: int, username: String)
 signal player_disconnected(id: int)
@@ -26,6 +26,7 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
 	Steam.lobby_message.connect(_on_lobby_message)
+	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
 
 func _process(delta: float) -> void:
 	pass
@@ -81,7 +82,7 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 		lobby_join_failed.emit(FAIL_REASON)
 
 func get_lobby_members() -> void:
-	players.clear()
+	lobby_members.clear()
 	var num_of_members: int = Steam.getNumLobbyMembers(lobby_id)
 	
 	for this_member in range(0, num_of_members):
@@ -164,15 +165,17 @@ func _on_player_connected(id: int):
 	print('player connected')
 	register_player.rpc_id(id, SteamManager.steam_username)
 	player_connected.emit(id, SteamManager.steam_username)
+	get_lobby_members()
 	#print(id)
 	#var steam_username = Steam.getFriendPersonaName(id)
 	#print(steam_username)
 	#players[id] = steam_username
 
 func _on_player_disconnected(id: int):
+	print('player disconnected')
 	unregister_player.rpc(id)
 	player_disconnected.emit(id, SteamManager.steam_username)
-	print('player disconnected')
+	get_lobby_members()
 
 func _on_connection():
 	print('conection success')
@@ -186,7 +189,7 @@ func _on_server_disconnected():
 
 func _on_lobby_message(_lobby_id: int, user: int, buffer: String, chat_type: int):
 	var username = Steam.getFriendPersonaName(user)
-	lobby_message_received.emit(username, buffer)
+	lobby_message_received.emit(username + ': ' + buffer + '\n')
 
 @rpc('any_peer', 'call_local', 'reliable')
 func register_player(name):
@@ -194,11 +197,20 @@ func register_player(name):
 	print('Registered player name %s' % name)
 	print('Registered player ID %s' % id)
 	players[id] = name
-	
-	get_lobby_members()
 
 @rpc('any_peer', 'call_local', 'reliable')
 func unregister_player(id):
 	players.erase(id)
+
+func _on_lobby_chat_update(_lobby_id: int, change_id: int, making_change_id: int, chat_state: int):
+	# Get the user who has made the lobby change
+	var changer_name: String = Steam.getFriendPersonaName(change_id)
 	
+	if chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_ENTERED:
+		send_message('%s has joined the lobby.' % changer_name)
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_LEFT:
+		send_message('%s has left the lobby.' % changer_name)
+	else:
+		send_message('%s did... something.' % changer_name)
+
 	get_lobby_members()
