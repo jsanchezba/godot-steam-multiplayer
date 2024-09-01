@@ -128,9 +128,9 @@ func matchmaking_loop():
 		print("[STEAM] Failed to automatically match you with a lobby. Please try again.")
 
 func _on_lobby_match_list(lobbies: Array) -> void:
+	print('finding lobbies...')
 	var attempting_join: bool = false
 	for this_lobby in lobbies:
-		print(this_lobby)
 		var lobby_name: String = Steam.getLobbyData(this_lobby, "name")
 		var lobby_nums: int = Steam.getNumLobbyMembers(this_lobby)
 		
@@ -192,11 +192,11 @@ func _on_lobby_message(_lobby_id: int, user: int, buffer: String, chat_type: int
 	lobby_message_received.emit(username + ': ' + buffer + '\n')
 
 @rpc('any_peer', 'call_local', 'reliable')
-func register_player(name):
+func register_player(_name):
 	var id = multiplayer.get_remote_sender_id()
-	print('Registered player name %s' % name)
+	print('Registered player name %s' % _name)
 	print('Registered player ID %s' % id)
-	players[id] = name
+	players[id] = _name
 
 @rpc('any_peer', 'call_local', 'reliable')
 func unregister_player(id):

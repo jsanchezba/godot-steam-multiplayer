@@ -53,7 +53,16 @@ func _on_message_received(message: String) -> void:
 	messages_container.add_text(message + '\n')
 
 func _on_play_button_pressed() -> void:
-	game_started.emit()
+	if not multiplayer.is_server():
+		accept_dialog.title = 'Cannot start game'
+		accept_dialog.dialog_text = 'Not lobby owner'
+		accept_dialog.show()
+	elif not SteamNetwork.lobby_id:
+		accept_dialog.title = 'Cannot start game'
+		accept_dialog.dialog_text = 'Lobby not created'
+		accept_dialog.show()
+	else:
+		game_started.emit()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed('enter'):
