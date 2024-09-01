@@ -15,12 +15,16 @@ func _ready() -> void:
 	set_multiplayer_authority(str(name).to_int())
 	player_name.text = username
 
-func _process(delta: float) -> void:
-	if is_multiplayer_authority():
-		update_player_position.rpc(name, position, player_direction)
+#func _process(delta: float) -> void:
+	#if is_multiplayer_authority():
+		#update_player_position.rpc(name, position, player_direction)
 
 func _physics_process(delta: float) -> void:
 	current_delta = delta
+	
+	if is_multiplayer_authority():
+		update_player_position.rpc(name, position, player_direction)
+		
 	if is_multiplayer_authority():
 		var direction = Input.get_vector('left', 'right', 'up', 'down')
 		player_direction = direction
