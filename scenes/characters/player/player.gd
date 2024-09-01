@@ -1,7 +1,8 @@
 class_name Player extends CharacterBody2D
 
 @onready var player_name: Label = $PlayerName
-const speed = 300.0
+@onready var sprite: AnimatedSprite2D = $Sprite
+const speed = 200.0
 var current_delta
 
 var id: int = 0
@@ -19,12 +20,18 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	current_delta = delta
+	var direction = Input.get_vector('left', 'right', 'up', 'down')
 	if is_multiplayer_authority():
-		var direction = Input.get_vector('left', 'right', 'up', 'down')
 		
 		velocity = direction * speed
 		
 		move_and_slide()
+		
+	if direction:
+		sprite.flip_h = true if direction.x == -1 else false
+		sprite.play('run')
+	else:
+		sprite.play('idle')
 
 @rpc('any_peer', 'call_local', 'unreliable')
 func update_player_position(entity_id: String, updated_position: Vector2):

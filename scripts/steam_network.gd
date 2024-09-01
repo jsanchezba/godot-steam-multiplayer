@@ -10,7 +10,10 @@ var socket = null
 signal lobby_created(_lobby_id: int, _name: String)
 signal lobby_joined(_lobby_id: int, _name: String)
 signal lobby_message_received(username: String, message: String)
-signal player_joined(id: int)
+signal lobby_join_failed(reason: String)
+signal player_connected(id: int, username: String)
+signal player_disconnected(id: int)
+signal lobby_members_changed
 
 func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created.bind())
@@ -42,6 +45,10 @@ func _on_lobby_created(_connect: int, new_lobby_id: int) -> void:
 		print_debug('[INFO] -> Creating socket connection..')
 		create_socket()
 		
+		if socket:
+			var id = socket.get_unique_id()
+			register_player.rpc_id(id, SteamManager.steam_username)
+		
 		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
 		lobby_created.emit(lobby_id, lobby_name)
 
@@ -72,7 +79,7 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 			9:  FAIL_REASON = "This lobby is community locked."
 			10: FAIL_REASON = "A user in the lobby has blocked you from joining."
 			11: FAIL_REASON = "A user you have blocked is in the lobby."
-		print(FAIL_REASON)
+		lobby_join_failed.emit(FAIL_REASON)
 
 func get_friends_lobbies() -> Dictionary:
 	var results: Dictionary = {}
@@ -145,6 +152,7 @@ func send_message(message: String) -> void:
 
 func _on_player_connected(id: int):
 	register_player.rpc_id(id, SteamManager.steam_username)
+	player_connected.emit(id, SteamManager.steam_username)
 	#print(id)
 	#var steam_username = Steam.getFriendPersonaName(id)
 	#print(steam_username)
@@ -173,3 +181,8 @@ func register_player(name):
 	print('Registered player name %s' % name)
 	print('Registered player ID %s' % id)
 	players[id] = name
+	lobby_members_changed.emit()
+
+func unregister_player(id):
+	players.erase(id)
+	lobby_members_changed.emit()

@@ -1,42 +1,123 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjwtcxqs4yumy"]
+[gd_scene load_steps=25 format=3 uid="uid://bjwtcxqs4yumy"]
 
 [ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_3y25r"]
-[ext_resource type="Texture2D" uid="uid://dg4a4inu583r1" path="res://assets/characters/player.png" id="2_ur6vo"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2xhn5"]
-atlas = ExtResource("2_ur6vo")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4oq47"]
-atlas = ExtResource("2_ur6vo")
-region = Rect2(32, 0, 32, 32)
+[ext_resource type="Texture2D" uid="uid://d1x46v2arvsgj" path="res://assets/characters/hashashin/idle/idle_1.png" id="2_j3wnx"]
+[ext_resource type="Texture2D" uid="uid://c3l1fsrbwgsm0" path="res://assets/characters/hashashin/idle/idle_2.png" id="3_b7rg5"]
+[ext_resource type="Texture2D" uid="uid://buwp37gsao3cf" path="res://assets/characters/hashashin/idle/idle_3.png" id="4_pwndc"]
+[ext_resource type="Texture2D" uid="uid://c1bnvbktbw8bu" path="res://assets/characters/hashashin/idle/idle_4.png" id="5_8fqav"]
+[ext_resource type="Texture2D" uid="uid://ci6s18wgycde7" path="res://assets/characters/hashashin/idle/idle_5.png" id="6_hckes"]
+[ext_resource type="Texture2D" uid="uid://d2a65lngo4oex" path="res://assets/characters/hashashin/idle/idle_6.png" id="7_i5rqt"]
+[ext_resource type="Texture2D" uid="uid://bjpq21jw3827y" path="res://assets/characters/hashashin/idle/idle_7.png" id="8_85ted"]
+[ext_resource type="Texture2D" uid="uid://bxfbr75geqmk0" path="res://assets/characters/hashashin/idle/idle_8.png" id="9_u0g04"]
+[ext_resource type="Texture2D" uid="uid://ckme10yhjssxq" path="res://assets/characters/hashashin/run/run_1.png" id="10_1ioau"]
+[ext_resource type="Texture2D" uid="uid://cnlsug6wen2v0" path="res://assets/characters/hashashin/run/run_2.png" id="11_m2kj5"]
+[ext_resource type="Texture2D" uid="uid://bt07w0jcfohup" path="res://assets/characters/hashashin/run/run_3.png" id="12_nkoai"]
+[ext_resource type="Texture2D" uid="uid://0mf2jjbbwvjf" path="res://assets/characters/hashashin/run/run_4.png" id="13_pw03n"]
+[ext_resource type="Texture2D" uid="uid://nu7d260dbak5" path="res://assets/characters/hashashin/run/run_5.png" id="14_bnoj4"]
+[ext_resource type="Texture2D" uid="uid://btu56feif5wvs" path="res://assets/characters/hashashin/run/run_6.png" id="15_atep7"]
+[ext_resource type="Texture2D" uid="uid://dnfu2kemvjseg" path="res://assets/characters/hashashin/run/run_7.png" id="16_ewwba"]
+[ext_resource type="Texture2D" uid="uid://pffkua2paamx" path="res://assets/characters/hashashin/run/run_8.png" id="17_0af8n"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_24q1u"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_2xhn5")
+"texture": ExtResource("2_j3wnx")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_4oq47")
+"texture": ExtResource("3_b7rg5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_pwndc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_8fqav")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_hckes")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_i5rqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_85ted")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_u0g04")
 }],
 "loop": true,
 "name": &"idle",
-"speed": 2.0
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_1ioau")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_m2kj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_nkoai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_pw03n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_bnoj4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_atep7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ewwba")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_0af8n")
+}],
+"loop": true,
+"name": &"run",
+"speed": 8.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f048q"]
-radius = 5.0
-height = 16.0
+radius = 12.0
+height = 42.0
+
+[sub_resource type="Gradient" id="Gradient_83gdj"]
+offsets = PackedFloat32Array(0, 0.454545, 1)
+colors = PackedColorArray(0.819486, 0.674283, 0.460839, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6kc1s"]
+gradient = SubResource("Gradient_83gdj")
+width = 256
+height = 256
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6yvi6"]
+blend_mode = 1
+light_mode = 2
+
+[sub_resource type="Gradient" id="Gradient_robni"]
+offsets = PackedFloat32Array(0, 0.662338)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bkpks"]
+gradient = SubResource("Gradient_robni")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_3y25r")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -48)
 sprite_frames = SubResource("SpriteFrames_24q1u")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.91808
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_f048q")
@@ -46,9 +127,22 @@ zoom = Vector2(2, 2)
 
 [node name="PlayerName" type="Label" parent="."]
 offset_left = -23.0
-offset_top = -21.0
+offset_top = -37.0
 offset_right = 70.0
-offset_bottom = 2.0
+offset_bottom = -14.0
 scale = Vector2(0.5, 0.5)
 text = "Playername"
 horizontal_alignment = 1
+
+[node name="Torch" type="PointLight2D" parent="."]
+position = Vector2(-2.38419e-07, -1.13687e-13)
+color = Color(0.504726, 0.613172, 0.664122, 1)
+energy = 0.8
+shadow_color = Color(0.239489, 0.117881, 0.0606148, 0)
+texture = SubResource("GradientTexture2D_6kc1s")
+
+[node name="VolumetricLight" type="Sprite2D" parent="Torch"]
+modulate = Color(0.4, 0.298039, 0.258824, 0.392157)
+z_index = 10
+material = SubResource("CanvasItemMaterial_6yvi6")
+texture = SubResource("GradientTexture2D_bkpks")

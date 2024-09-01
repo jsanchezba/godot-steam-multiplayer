@@ -13,6 +13,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.151276, 0.151276, 0.151276, 1)
+
 [node name="MarginContainer" type="MarginContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = 15
@@ -65,7 +74,8 @@ grow_horizontal = 2
 text = "Players"
 horizontal_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/MarginContainer/HBoxContainer/Side/Players"]
+[node name="MemberList" type="RichTextLabel" parent="Control/MarginContainer/HBoxContainer/Side/Players"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
 offset_top = 30.0
@@ -150,6 +160,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Write a message..."
+
+[node name="AcceptDialog" type="AcceptDialog" parent="Control"]
+unique_name_in_owner = true
+initial_position = 1
+size = Vector2i(250, 100)
 
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/CreateLobby" to="." method="_on_create_lobby_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/HBoxContainer/Side/JoinLobby" to="." method="_on_join_lobby_pressed"]

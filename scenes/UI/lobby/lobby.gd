@@ -4,6 +4,8 @@ class_name Lobby extends CanvasLayer
 @onready var lobby_name_value: LineEdit = %LobbyNameValue
 @onready var message_input: LineEdit = %MessageInput
 @onready var messages_container: RichTextLabel = %MessagesContainer
+@onready var member_list: RichTextLabel = %MemberList
+@onready var accept_dialog: AcceptDialog = %AcceptDialog
 
 var is_message_focused: bool = false
 
@@ -15,6 +17,10 @@ func _ready() -> void:
 		
 	if not SteamNetwork.lobby_message_received.is_connected(_on_message_received):
 		SteamNetwork.lobby_message_received.connect(_on_message_received)
+		
+	if not SteamNetwork.lobby_members_changed.is_connected(_on_lobby_members_changed):
+		SteamNetwork.lobby_members_changed.connect(_on_lobby_members_changed)
+	SteamNetwork.lobby_join_failed.connect(_on_lobby_join_failed)
 
 func _process(delta: float) -> void:
 	pass
@@ -46,7 +52,6 @@ func _on_matchmaking_pressed() -> void:
 func _on_message_received(username: String, message: String) -> void:
 	messages_container.add_text(username + ': ' + message + '\n')
 
-
 func _on_play_button_pressed() -> void:
 	game_started.emit()
 
@@ -64,3 +69,14 @@ func send_message():
 	var message = message_input.text
 	Steam.sendLobbyChatMsg(SteamNetwork.lobby_id, message)
 	message_input.text = ''
+
+func _on_lobby_members_changed():
+	member_list.text = ''
+	var members = SteamNetwork.players
+	for member in members:
+		member_list.add_text(members[member] + '\n')
+
+func _on_lobby_join_failed(reason: String) -> void:
+	accept_dialog.title = 'Cannot join lobby'
+	accept_dialog.dialog_text = reason
+	accept_dialog.show()

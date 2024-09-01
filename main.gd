@@ -20,7 +20,7 @@ func spawn_player(id: int, username: String):
 	new_player.name = str(id)
 	new_player.id = id
 	new_player.username = username
-	call_deferred('add_child', new_player)
+	get_tree().root.call_deferred('add_child', new_player)
 	print_debug('[INFO] -> JOINS player ' + new_player.name)
 	if is_multiplayer_authority():
 		SceneManager.player = new_player
@@ -31,6 +31,7 @@ func _on_game_started() -> void:
 @rpc('any_peer', 'call_local', 'reliable')
 func game_started():
 	var uid = SteamNetwork.socket.get_unique_id()
+	SceneManager.change_scene('level_1')
 	spawn_player(uid, SteamManager.steam_username)
 	var players = SteamNetwork.players
 	for player in players:
@@ -38,4 +39,3 @@ func game_started():
 		print('Spawned player %s' % players[player])
 		
 	lobby_UI.hide()
-	SceneManager.change_scene('level_1')
