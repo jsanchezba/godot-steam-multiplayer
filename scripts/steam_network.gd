@@ -170,7 +170,7 @@ func _on_player_connected(id: int):
 	#players[id] = steam_username
 
 func _on_player_disconnected(id: int):
-	unregister_player.rpc_id(id)
+	unregister_player.rpc(id)
 	player_disconnected.emit(id, SteamManager.steam_username)
 	print('player disconnected')
 
