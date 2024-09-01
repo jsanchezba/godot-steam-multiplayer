@@ -1,7 +1,8 @@
-[gd_scene load_steps=25 format=3 uid="uid://bjwtcxqs4yumy"]
+[gd_scene load_steps=26 format=3 uid="uid://bjwtcxqs4yumy"]
 
 [ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_3y25r"]
 [ext_resource type="Texture2D" uid="uid://d1x46v2arvsgj" path="res://assets/characters/hashashin/idle/idle_1.png" id="2_j3wnx"]
+[ext_resource type="Texture2D" uid="uid://b4oj3ksf8g3tm" path="res://assets/FX/light_large.png" id="3_aadgn"]
 [ext_resource type="Texture2D" uid="uid://c3l1fsrbwgsm0" path="res://assets/characters/hashashin/idle/idle_2.png" id="3_b7rg5"]
 [ext_resource type="Texture2D" uid="uid://buwp37gsao3cf" path="res://assets/characters/hashashin/idle/idle_3.png" id="4_pwndc"]
 [ext_resource type="Texture2D" uid="uid://c1bnvbktbw8bu" path="res://assets/characters/hashashin/idle/idle_4.png" id="5_8fqav"]
@@ -100,7 +101,7 @@ blend_mode = 1
 light_mode = 2
 
 [sub_resource type="Gradient" id="Gradient_robni"]
-offsets = PackedFloat32Array(0, 0.662338)
+offsets = PackedFloat32Array(0, 0.376623)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bkpks"]
@@ -135,9 +136,10 @@ text = "Playername"
 horizontal_alignment = 1
 
 [node name="Torch" type="PointLight2D" parent="."]
+visible = false
 position = Vector2(-2.38419e-07, -1.13687e-13)
 color = Color(0.504726, 0.613172, 0.664122, 1)
-energy = 0.8
+energy = 0.4
 shadow_color = Color(0.239489, 0.117881, 0.0606148, 0)
 texture = SubResource("GradientTexture2D_6kc1s")
 
@@ -146,3 +148,7 @@ modulate = Color(0.4, 0.298039, 0.258824, 0.392157)
 z_index = 10
 material = SubResource("CanvasItemMaterial_6yvi6")
 texture = SubResource("GradientTexture2D_bkpks")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_aadgn")

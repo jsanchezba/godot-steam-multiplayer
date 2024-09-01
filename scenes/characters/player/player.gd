@@ -43,4 +43,8 @@ func update_player_position(entity_id: String, updated_position: Vector2, update
 		if name == entity_id:
 			position = lerp(position, updated_position, current_delta * 15)
 			player_direction = updated_direction
+			
+func _move_player_position(new_position: Vector2):
+	print('move player position')
+	global_position = new_position
 	
