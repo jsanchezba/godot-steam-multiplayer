@@ -30,8 +30,8 @@ func _on_game_started() -> void:
 
 @rpc('any_peer', 'call_local', 'reliable')
 func game_started():
-	var uid = SteamNetwork.socket.get_unique_id()
 	SceneManager.change_scene('level_1')
+	var uid = SteamNetwork.socket.get_unique_id()
 	spawn_player(uid, SteamManager.steam_username)
 	var players = SteamNetwork.players
 	for player in players:

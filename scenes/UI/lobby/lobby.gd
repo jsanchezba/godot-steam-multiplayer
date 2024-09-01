@@ -72,7 +72,7 @@ func send_message():
 
 func _on_lobby_members_changed():
 	member_list.text = ''
-	var members = SteamNetwork.players
+	var members = SteamNetwork.lobby_members
 	for member in members:
 		member_list.add_text(members[member] + '\n')
 

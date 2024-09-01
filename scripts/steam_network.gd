@@ -5,6 +5,7 @@ var lobby_members_max: int = 2
 var is_host: bool = false
 var matchmake_phase = 0
 var players: Dictionary
+var lobby_members: Dictionary
 
 var socket = null
 signal lobby_created(_lobby_id: int, _name: String)
@@ -63,9 +64,7 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
 		lobby_joined.emit(lobby_id, lobby_name)
 		
-		if socket:
-			var my_id = socket.get_unique_id()
-			register_player.rpc_id(my_id, SteamManager.steam_username)
+		get_lobby_members()
 	else:
 		var FAIL_REASON: String
 		match response:
@@ -81,6 +80,17 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 			11: FAIL_REASON = "A user you have blocked is in the lobby."
 		lobby_join_failed.emit(FAIL_REASON)
 
+func get_lobby_members() -> void:
+	players.clear()
+	var num_of_members: int = Steam.getNumLobbyMembers(lobby_id)
+	
+	for this_member in range(0, num_of_members):
+		var member_steam_id: int = Steam.getLobbyMemberByIndex(lobby_id, this_member)
+		var member_steam_name: String = Steam.getFriendPersonaName(member_steam_id)
+		
+		lobby_members[member_steam_id] = member_steam_name
+		
+	lobby_members_changed.emit()
 func get_friends_lobbies() -> Dictionary:
 	var results: Dictionary = {}
 	
@@ -151,6 +161,7 @@ func send_message(message: String) -> void:
 		print_debug('[ERROR] -> Message not send')
 
 func _on_player_connected(id: int):
+	print('player connected')
 	register_player.rpc_id(id, SteamManager.steam_username)
 	player_connected.emit(id, SteamManager.steam_username)
 	#print(id)
@@ -159,6 +170,8 @@ func _on_player_connected(id: int):
 	#players[id] = steam_username
 
 func _on_player_disconnected(id: int):
+	unregister_player.rpc_id(id)
+	player_disconnected.emit(id, SteamManager.steam_username)
 	print('player disconnected')
 
 func _on_connection():
@@ -181,8 +194,11 @@ func register_player(name):
 	print('Registered player name %s' % name)
 	print('Registered player ID %s' % id)
 	players[id] = name
-	lobby_members_changed.emit()
+	
+	get_lobby_members()
 
+@rpc('any_peer', 'call_local', 'reliable')
 func unregister_player(id):
 	players.erase(id)
-	lobby_members_changed.emit()
+	
+	get_lobby_members()
