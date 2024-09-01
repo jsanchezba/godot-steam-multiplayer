@@ -44,11 +44,7 @@ func _on_lobby_created(_connect: int, new_lobby_id: int) -> void:
 		Steam.allowP2PPacketRelay(true)
 		print_debug('[INFO] -> Creating socket connection..')
 		create_socket()
-		
-		if socket:
-			var id = socket.get_unique_id()
-			register_player.rpc_id(id, SteamManager.steam_username)
-		
+
 		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
 		lobby_created.emit(lobby_id, lobby_name)
 
@@ -66,6 +62,10 @@ func _on_lobby_joined(_lobby_id: int, _permissions: int, _locked: bool, response
 		
 		var lobby_name = Steam.getLobbyData(lobby_id,  'name')
 		lobby_joined.emit(lobby_id, lobby_name)
+		
+		if socket:
+			var my_id = socket.get_unique_id()
+			register_player.rpc_id(my_id, SteamManager.steam_username)
 	else:
 		var FAIL_REASON: String
 		match response:
